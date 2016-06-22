@@ -138,5 +138,13 @@ describe SimpleCircuitBreaker do
 
       lambda { @breaker.handle {} }.must_raise SimpleCircuitBreaker::CircuitOpenError
     end
+
+    it 'records the cause' do
+      begin
+        @breaker.handle { 23 }
+      rescue SimpleCircuitBreaker::CircuitOpenError => exception
+        exception.cause.class.must_equal RuntimeError
+      end
+    end
   end
 end
